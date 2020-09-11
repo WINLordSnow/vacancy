@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 
 class Vacancy {
     private long start;
@@ -43,10 +41,10 @@ public class Main {
         return tempDots;
     }
 
-    static boolean ifNotInDots(long dot, long[] dots) {
+    static boolean ifNotInDots(long dot, long[] dots, int length) {
         boolean temp = true;
-        for (long i : dots) {
-            if (i == dot) {
+        for (int i = 0; i < length; i++) {
+            if (dots[i] == dot) {
                 temp = false;
                 break;
             }
@@ -54,41 +52,36 @@ public class Main {
         return temp;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 	// write your code here
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String choice;
+        Scanner scanner = new Scanner(System.in);
         int quantityVacancy;
-        int quantityString = 0;
         int dotsStart=0;
         int dotsEnd=0;
-        choice = br.readLine().toLowerCase();
-        quantityVacancy = Integer.parseInt(choice);
+        quantityVacancy = scanner.nextInt();
         long[] allDotsStart = new long[quantityVacancy];
         long[] allDotsEnd = new long[quantityVacancy];
         Vacancy[] allVacancy = new Vacancy[quantityVacancy];
-        for (int i=0; i<quantityVacancy; i++) {
+        for (int i=0; i < quantityVacancy; i++) {
             allVacancy[i] = new Vacancy();
         }
-
-        do {
-            quantityString++;
-            choice = br.readLine().toLowerCase();
-            int k;
-            k = choice.indexOf(' ');
-            int start = Integer.parseInt(choice.substring(0, k));
-            int end = Integer.parseInt(choice.substring(k + 1));
-            allVacancy[quantityString - 1].setDate(start, end);
-            if (ifNotInDots(start, allDotsStart)) {
+        for (int i = 0; i < quantityVacancy; i++) {
+            int start = scanner.nextInt();
+            int end = scanner.nextInt();
+            allVacancy[i].setDate(start, end);
+            if (ifNotInDots(start, allDotsStart, dotsStart)) {
                 allDotsStart[dotsStart] = start;
                 dotsStart++;
             }
-            if (ifNotInDots(end, allDotsEnd)) {
+            if (ifNotInDots(end, allDotsEnd, dotsEnd)) {
                 allDotsEnd[dotsEnd] = end;
                 dotsEnd++;
             }
-        } while ((quantityString) != (quantityVacancy));
-        long[] allDots = new long[dotsStart+dotsEnd];
+        }
+        scanner.close();
+
+       // long startTime = System.currentTimeMillis();
+        long[] allDots = new long[dotsStart + dotsEnd];
         System.arraycopy(allDotsStart, 0, allDots, 0, dotsStart);
         System.arraycopy(allDotsEnd, 0, allDots, dotsStart, dotsEnd);
 
@@ -115,5 +108,6 @@ public class Main {
             }
         }
         System.out.println(quantityMax+" "+sum);
+      //  System.out.println(System.currentTimeMillis() - startTime);
     }
 }
